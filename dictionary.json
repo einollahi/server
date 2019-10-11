@@ -1,0 +1,16 @@
+{
+  "language": "fa",
+  "fa": {
+    "direction": "rtl",
+    "locale": "fa",
+    "firstDayOfWeek": "saturday",
+    "calendar": "jalali",
+    "word": {
+      "login": "ورود",
+      "logout": "خروج",
+      "login to system": "ورود به سیستم",
+      "username": "نام کاربری",
+      "password": "رمز عبور"
+    }
+  }
+}
