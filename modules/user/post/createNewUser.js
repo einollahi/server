@@ -6,13 +6,10 @@ module.exports = class CreateNewUser {
 	async handler(payload, user) {
 		if (!payload || !payload.username || !payload.password || !payload.email) throw new Error('payload is not defined');
 
-		let userFound = await new Repository().getUserByUsername(payload.username);
+		let userFound = await new Repository().getUser(null, payload.username, payload.email);
 
-		if (userFound) throw new Error('username already is in use');
-
-		userFound = await new Repository().getUserByEmail(payload.email);
-
-		if (userFound) throw new Error('somebody already registered with this email');
+		if (userFound && userFound.username === payload.username) throw new Error('username already is in use');
+		if (userFound && userFound.email === payload.email) throw new Error('somebody already registered with this email');
 
 		return new Repository().createNewUser({
 			username: payload.username,

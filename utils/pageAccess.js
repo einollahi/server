@@ -1,8 +1,6 @@
 module.exports = {
   user: {
-    get: {
-
-    },
+    get: {},
     post: {
       createNewUser: ['admin', 'moderator']
     }

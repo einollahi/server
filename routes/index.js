@@ -3,18 +3,28 @@ const router = express.Router();
 const passport = require('passport');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', function (req, res, next) {
+  res.render('index', {title: 'Express'});
 });
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    if (err) { return res.status(501).json(err); }
-    if (!user) { return res.status(501).json(info); }
+    if (err) {
+      return res.status(501).json(err);
+    }
+    if (!user) {
+      return res.status(501).json(info);
+    }
 
     req.logIn(user, (err) => {
-      if (err) { return res.status(501).json(err); }
-      return res.status(200).json({message: 'Logged in Successfully'});
+      if (err) {
+        return res.status(501).json(err);
+      }
+      return res.status(200).json({
+        message: 'Logged in Successfully',
+        userId: req.user.id,
+        username: req.user.username
+      });
     });
 
   })(req, res, next);

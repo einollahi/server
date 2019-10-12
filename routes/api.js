@@ -21,7 +21,7 @@ router.all('/*', async (req, res, next) => {
     if (method === 'post') {
       const postResponse = await new Command(module, command).postHandler(payload, user);
 
-      res.status(201).json(postResponse);
+      res.status(200).json(postResponse);
     } else if (method === 'get') {
       const getResponse = await new Command(module, command).getHandler(payload, user);
 
