@@ -20,6 +20,9 @@ const Person = sequelize.define('person', {
   national_code: {
     type: Sequelize.STRING
   },
+  birth_date: {
+    type: Sequelize.DATE
+  },
   mobile: {
     type: Sequelize.JSON
   },

@@ -53,7 +53,7 @@ module.exports = class Repository {
     });
   }
 
-  async createUserPersonality(userId, {first_name, last_name, avatar_url, national_code, mobile, phone, data_json}) {
+  async createNewPerson(userId, {first_name, last_name, avatar_url, national_code, mobile, phone, data_json}) {
     return Person.create({
       first_name,
       last_name,
