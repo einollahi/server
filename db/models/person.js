@@ -14,23 +14,38 @@ const Person = sequelize.define('person', {
   last_name: {
     type: Sequelize.STRING
   },
+  gender: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   avatar_url: {
     type: Sequelize.STRING
   },
   national_code: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  medical_number: {
+    type: Sequelize.STRING
+  },
+  speciality: {
+    type: Sequelize.STRING
+  },
+  hospital: {
     type: Sequelize.STRING
   },
   birth_date: {
     type: Sequelize.DATE
   },
-  mobile: {
-    type: Sequelize.JSON
+  address: {
+    type: Sequelize.STRING
   },
   phone: {
     type: Sequelize.JSON
   },
-  data_json: {
-    type: Sequelize.JSON
+  address: {
+    type: Sequelize.STRING
   }
 });
 

@@ -2,8 +2,6 @@ const router = require('express').Router();
 const Command = require('../utils/command');
 const User = require('../db/models/user');
 
-const UserRepository = require('../modules/user/repository/userRepository');
-
 router.all('/*', async (req, res, next) => {
   const method = req.body.method.toLowerCase();
   const module = req.body.module;
@@ -30,7 +28,7 @@ router.all('/*', async (req, res, next) => {
       next();
     }
   } catch (e) {
-    res.status(500).json({error_msg: e.message});
+    res.status(500).json({error_msg: e.message, err: e});
   }
 });
 

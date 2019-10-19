@@ -13,29 +13,31 @@ module.exports = class Repository {
     return User.findOne({
       attributes: {exclude: ['id', 'password', 'personId']},
       where: {[Op.or]: [{id}, {username}, {email}]},
-      include: [{
-        attributes: {exclude: ['createdAt', 'updatedAt']},
-        model: Person,
-        required: false
-      }]
+      include: [
+        {
+          attributes: {exclude: ['createdAt', 'updatedAt']},
+          model: Person,
+          required: false
+        }
+      ]
     });
   }
 
   async getAllUsers(order) {
-    const orderClause = []
-    if (order === 'byName')
-      orderClause.push(['last_name', 'ASC'], ['first_name', 'ASC']);
-    else
-      orderClause.push(['createdAt', 'Desc']);
+    const orderClause = [];
+    if (order === 'byName') orderClause.push(['last_name', 'ASC'], ['first_name', 'ASC']);
+    else orderClause.push(['createdAt', 'Desc']);
 
     const users = await User.findAll({
       where: {[Op.not]: [{username: 'admin'}]},
       attributes: {exclude: ['id', 'password', 'personId']},
-      include: [{
-        attributes: {exclude: ['createdAt', 'updatedAt']},
-        model: Person,
-        required: false
-      }],
+      include: [
+        {
+          attributes: {exclude: ['createdAt', 'updatedAt']},
+          model: Person,
+          required: false
+        }
+      ],
       order: [['createdAt', 'Desc']]
     }).map(el => el.get({plain: true}));
 
@@ -43,26 +45,29 @@ module.exports = class Repository {
   }
 
   // post
-  async createNewUser({username, password, email, role, active = true}) {
+  async createNewUser({username, password, email, role, active = true, personId}) {
     return User.create({
       username: username,
       password: bcrypt.hashSync(password, 10),
       email,
       role,
-      active
+      active,
+      personId
     });
   }
 
-  async createNewPerson(userId, {first_name, last_name, avatar_url, national_code, mobile, phone, data_json}) {
+  async createNewPerson({first_name, last_name, gender, avatar_url, national_code, medical_number, speciality, hospital, phone, address}) {
     return Person.create({
       first_name,
       last_name,
+      gender,
       avatar_url,
       national_code,
-      mobile,
+      medical_number,
+      speciality,
+      hospital,
       phone,
-      data_json,
-      userId
+      address
     });
   }
 
@@ -73,5 +78,4 @@ module.exports = class Repository {
   async deactivateUser({id, username, email}) {
     return User.update({active: false}, {where: {[Op.or]: [{id}, {username}, {email}]}});
   }
-
 };
