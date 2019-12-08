@@ -1,21 +1,21 @@
 const router = require('express').Router();
 const Command = require('../utils/command');
-const User = require('../db/models/user');
 
 router.all('/*', async (req, res, next) => {
+
   const method = req.body.method.toLowerCase();
   const module = req.body.module;
   const command = req.body.command;
   const payload = req.body.payload;
   let user;
 
-  if (req.user) {
-    const userProp = await User.findOne({where: {id: req.user}});
-    user = {id: userProp.id, role: userProp.role};
+  if (req.user && req.user.id) {
+    user = {id: req.user.id, role: req.user.role};
   } else {
     user = {id: null, role: null};
   }
   try {
+
     if (method === 'post') {
       const postResponse = await new Command(module, command).postHandler(payload, user);
 

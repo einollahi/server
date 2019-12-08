@@ -1,38 +1,66 @@
 const Sequelize = require('sequelize');
 
-const {sequelize} = require('../index');
+let User;
 
-const Person = require('./person');
+const initialize = seq => {
+  User = seq.define(
+    'user',
+    {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4
+      },
+      username: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'user'
+      },
+      registered_by: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      first_seen: {
+        type: Sequelize.BOOLEAN
+      },
+      register_date: {
+        type: Sequelize.DATE
+      },
+      active: {
+        type: Sequelize.BOOLEAN
+      }
+    },
+    {
+      tableName: 'users'
+    }
+  );
+};
 
-const User = sequelize.define('user', {
-  id: {
-    type: Sequelize.UUID,
-    primaryKey: true,
-    defaultValue: Sequelize.UUIDV4
-  },
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  role: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: 'user'
-  },
-  active: {
-    type: Sequelize.BOOLEAN
-  }
-});
+const defineRelations = () => {
+  const Person = require('./person');
+  const Questionnaire = require('./questionnaire');
+  const Question = require('./question');
 
-User.belongsTo(Person, {constraints: true, onDelete: 'CASCADE'});
+  User.belongsTo(Person.model(), {foreignKey: {allowNull: true}, onDelete: 'RESTRICT'});
+  User.hasMany(Questionnaire.model(), {foreignKey: {allowNull: true}});
+  User.hasMany(Question.model(), {foreignKey: {allowNull: true}});
+};
 
-module.exports = User;
+module.exports = {
+  initialize,
+  model: () => User,
+  defineRelations
+};

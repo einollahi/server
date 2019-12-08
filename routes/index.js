@@ -1,13 +1,14 @@
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', {title: 'Express'});
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/user/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return res.status(501).json(err);
@@ -19,22 +20,26 @@ router.post('/login', (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) {
         return res.status(501).json(err);
-      }
-      return res.status(200).json({
-        message: 'Logged in Successfully',
-        userId: req.user.id,
-        username: req.user.username
-      });
-    });
+      } else {
+        const token = jwt.sign({
+          userId: req.user.id,
+          username: req.user.username,
+          email: req.user.email
+        }, 'secretCode', {expiresIn: '7 days'});
 
+
+        return res.status(200).json({
+          message: 'Logged in Successfully',
+          token: token
+        });
+      }
+    });
   })(req, res, next);
 });
 
-
-router.get('/logout', (req, res) => {
+router.get('/user/logout', (req, res) => {
   req.logout();
   res.status(200).json({message: 'Logged out Successfully'});
 });
-
 
 module.exports = router;

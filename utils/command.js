@@ -8,23 +8,34 @@ module.exports = class Command {
   }
 
   async getHandler(payload, user) {
-    const moduleAddress = ['..', 'modules', this.module, 'get', this.command].join('/');
+    try {
+      const moduleAddress = ['..', 'modules', this.module, 'get', this.command].join('/');
 
-    const query = require(moduleAddress);
-    if (access[this.module]['get'][this.command] && !access[this.module]['get'][this.command].includes(user.role))
-      throw new Error('you have not the right to access this page');
+      const query = require(moduleAddress);
 
-    return new query().handler(payload, user);
+      if (access[this.module]['get'][this.command] && !access[this.module]['get'][this.command].includes(user.role))
+        throw new Error('you have not the right to access this page');
+
+      return new query().handler(payload, user);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async postHandler(payload, user) {
-    const moduleAddress = ['..', 'modules', this.module, 'post', this.command].join('/');
+    try {
 
-    const command = require(moduleAddress);
+      const moduleAddress = ['..', 'modules', this.module, 'post', this.command].join('/');
 
-    if (access[this.module]['post'][this.command] && !access[this.module]['post'][this.command].includes(user.role))
-      throw new Error('you have not the right to access this page');
+      const command = require(moduleAddress);
 
-    return new command().handler(payload, user);
+      if (access[this.module]['post'][this.command] && !access[this.module]['post'][this.command].includes(user.role))
+        throw new Error('you have not the right to access this page');
+
+      return new command().handler(payload, user);
+    } catch (e) {
+      console.log(e);
+    }
+
   }
 };

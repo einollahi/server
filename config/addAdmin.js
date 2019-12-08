@@ -1,24 +1,38 @@
-const User = require('../db/models/user');
-const bcrypt = require('bcryptjs');
+const {User} = require('../db/db');
 
-(async () => {
-	try {
-		const adminFound = await User.findOne({ where: { role: 'admin' } });
+const Repository = require('../modules/users-management/repository/userRepository')
 
-		if (!adminFound) {
-			await User.create({
-				username: 'admin',
-				password: bcrypt.hashSync('123456', 10),
-				email: 'ali@test.com',
-				role: 'admin',
-				active: true
-			});
+async function createAdmin() {
+  try {
+    const adminFound = await User.findOne({where: {role: 'admin'}});
 
-			console.log('--> Admin is Added');
-		}
-	} catch (err) {
-		console.log(err);
-	} finally {
-		process.exit();
-	}
-})();
+    if (!adminFound) {
+      await createUser();
+
+      console.log('--> Admin is Added');
+    } else {
+      console.log('--> Admin already is available');
+    }
+  } catch (err) {
+    console.log(err);
+  } finally {
+    process.exit();
+  }
+}
+
+createAdmin();
+
+async function createUser() {
+  const userAdmin = await new Repository().createNewUser({
+    username: 'admin',
+    password: '123456',
+    email: 'admin@test.com',
+    role: 'admin',
+    registered_by: 'admin',
+    first_seen: true,
+    register_date: Date(Date.now()),
+    active: true,
+  });
+
+  return userAdmin.id;
+}
