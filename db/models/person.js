@@ -28,7 +28,7 @@ const initialize = seq => {
       type: Sequelize.STRING
     },
     mobile_phone: {
-      type: Sequelize.STRING
+      type: Sequelize.JSON
     },
     isFaculty: {
       type: Sequelize.BOOLEAN,
