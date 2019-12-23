@@ -27,24 +27,27 @@ module.exports = class Repository {
   }
 
   async getAllQuestionnaire() {
-    return Questionnaire.findAll({
+    const result = await Questionnaire.findAll({
       attributes: {exclude: ['updatedAt', 'userId']},
       include: [
         {
           attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
           model: Question,
-          required: false,
-          separate: true
+          required: false
         }
       ],
-      order: [['createdAt', 'Desc']],
-      raw: true
-      });
+      order: [['createdAt', 'Desc']]
+    });
+    console.log(result[0]);
+    if (result[0])
+      return result.map(el => el.get({plain: true}));
+
+    return null;
   }
 
   // post
   async createNewQuestionnare(title, description, userId) {
-    return Questionnaire.create({title, description,userId});
+    return Questionnaire.create({title, description, userId});
   }
 
   async addNewQuestion(title, question_type, position, options, userId, questionnaireId) {
