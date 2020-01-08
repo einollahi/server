@@ -1,3 +1,4 @@
+const all = 'all';
 const admin = 'admin';
 const moderator = 'moderator';
 const vip_user = 'vip_user';
@@ -5,8 +6,8 @@ const user = 'user';
 
 module.exports = {
   system: {
-    post: {
-      userAuthenticationCheck: [admin, moderator, vip_user, user]
+    get: {
+      userAuthenticationCheck: all
     }
   },
   user: {

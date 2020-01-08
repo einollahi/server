@@ -15,9 +15,9 @@ module.exports = class Repository {
       where: {id},
       include: [{
         model: Question,
-        required: false,
-        order: [['position'], ['asc']]
-      }]
+        required: false
+      }],
+      order: [[Question, 'position', 'ASC']]
     });
 
     if (questionnaire)
@@ -38,11 +38,15 @@ module.exports = class Repository {
       ],
       order: [['createdAt', 'Desc']]
     });
-    console.log(result[0]);
+    
     if (result[0])
       return result.map(el => el.get({plain: true}));
 
     return null;
+  }
+
+  async getQuestionById(id) {
+    return Question.findOne({where: {id}, raw: true});
   }
 
   // post
@@ -60,4 +64,27 @@ module.exports = class Repository {
       questionnaireId
     });
   }
+
+  async deleteQuestion(id) {
+    return Question.destroy({where: {id}});
+  }
+
+  async editQuestion(payload, userId) {
+    
+    return Question.update({
+      title: payload.questionTitle,
+      question_type: payload.questionType,
+      position: payload.questionNumber,
+      options: payload.questionOptions,
+      userId,
+      questionnaireId: payload.questionnaireId
+      }, {where: {id: payload.questionId}
+    });
+
+  }
+
+  async editQuestionnaireTitle(id, title, userId) {
+    return Questionnaire.update({title, userId}, {where: {id}});
+  }
+
 };
