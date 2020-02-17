@@ -20,9 +20,13 @@ const initialize = seq => {
 };
 
 const defineRelations = () => {
-  const Question = require('./question')
+  const Question = require('./question');
+  const Patient = require('./patient');
+  const User = require('./user');
 
-  Answer.belongsTo(Question.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
+  Answer.belongsTo(Question.model(), {foreignKey: 'question_id'});
+  Answer.belongsTo(Patient.model(), {foreignKey: 'patient_id'});
+  Answer.belongsTo(User.model(), {foreignKey: 'doctor_id'});
 };
 
 module.exports = {

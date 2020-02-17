@@ -28,10 +28,10 @@ module.exports = class Repository {
 
   async getAllQuestionnaire() {
     const result = await Questionnaire.findAll({
-      attributes: {exclude: ['updatedAt', 'userId']},
+      attributes: {exclude: ['updatedAt']},
       include: [
         {
-          attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
+          attributes: {exclude: ['createdAt', 'updatedAt']},
           model: Question,
           required: false
         }
@@ -50,18 +50,19 @@ module.exports = class Repository {
   }
 
   // post
-  async createNewQuestionnare(title, description, userId) {
-    return Questionnaire.create({title, description, userId});
+  async createNewQuestionnare(title, description, created_by) {
+    return Questionnaire.create({title, description, created_by});
   }
 
-  async addNewQuestion(title, question_type, position, options, userId, questionnaireId) {
+  async addNewQuestion(title, question_type, position, options, multi_answer, created_by, questionnaire_id) {
     return Question.create({
       title,
       question_type,
       position,
       options,
-      userId,
-      questionnaireId
+      multi_answer,
+      created_by,
+      questionnaire_id
     });
   }
 
@@ -69,15 +70,16 @@ module.exports = class Repository {
     return Question.destroy({where: {id}});
   }
 
-  async editQuestion(payload, userId) {
+  async editQuestion(payload, created_by) {
     
     return Question.update({
       title: payload.questionTitle,
       question_type: payload.questionType,
       position: payload.questionNumber,
       options: payload.questionOptions,
-      userId,
-      questionnaireId: payload.questionnaireId
+      multi_answer: payload.multiAnswer,
+      created_by,
+      questionnaire_id: payload.questionnaireId
       }, {where: {id: payload.questionId}
     });
 

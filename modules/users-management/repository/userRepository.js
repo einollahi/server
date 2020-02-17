@@ -48,8 +48,20 @@ module.exports = class Repository {
     return null;
   }
 
+  async getUserProfile(id) {
+    return User.findOne({
+      where: {id},
+      attributes:['username'],
+      include: [{
+        model: Person,
+        attributes:['first_name', 'last_name', 'avatar_url'],
+        required: true
+      }]
+    });
+  }
+
   // post
-  async createNewUser({username, password, email, role, active = true, registered_by, first_seen, register_date, personId}) {
+  async createNewUser({username, password, email, role, active = true, registered_by, first_seen, register_date, person_id}) {
     return User.create({
       username,
       password: bcrypt.hashSync(password, 10),
@@ -59,7 +71,7 @@ module.exports = class Repository {
       registered_by,
       first_seen,
       register_date,
-      personId
+      person_id
     });
   }
 

@@ -11,6 +11,6 @@ module.exports = class AddNewQuestion {
     if(!user)
       throw new Error('user is not defined');
 
-    return new Repository().addNewQuestion(payload.questionTitle, payload.questionType, payload.questionNumber, payload.questionOptions, user.id, payload.questionnaireId);
+    return new Repository().addNewQuestion(payload.questionTitle, payload.questionType, payload.questionNumber, payload.questionOptions, payload.multiAnswer, user.id, payload.questionnaireId);
   }
 }

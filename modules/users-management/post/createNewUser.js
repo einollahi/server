@@ -48,7 +48,7 @@ module.exports = class CreateNewUser {
         registered_by: user.id,
         first_seen: null,
         register_date: Date(Date.now()),
-        personId: newPerson.id
+        person_id: newPerson.id
       });
 
       return {message: 'new user is added successfully'};

@@ -29,16 +29,20 @@ const initialize = seq => {
         allowNull: false,
         defaultValue: 'user'
       },
+      first_seen: {
+        type: Sequelize.BOOLEAN
+      },
       registered_by: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      first_seen: {
-        type: Sequelize.BOOLEAN
-      },
       register_date: {
         type: Sequelize.DATE
       },
+      active_questionnaire: {
+        type: Sequelize.JSON
+      }
+      ,
       active: {
         type: Sequelize.BOOLEAN
       }
@@ -51,12 +55,16 @@ const initialize = seq => {
 
 const defineRelations = () => {
   const Person = require('./person');
-  const Questionnaire = require('./questionnaire');
+  const Answer = require('./answer');
+  const Patient = require('./patient');
   const Question = require('./question');
+  const Questionnaire = require('./questionnaire');
 
-  User.belongsTo(Person.model(), {foreignKey: {allowNull: true}, onDelete: 'RESTRICT'});
-  User.hasMany(Questionnaire.model(), {foreignKey: {allowNull: true}});
-  User.hasMany(Question.model(), {foreignKey: {allowNull: true}});
+  User.belongsTo(Person.model(), {foreignKey: 'person_id'});
+  User.hasMany(Answer.model(), {foreignKey: 'doctor_id'});
+  User.hasMany(Patient.model(), {foreignKey:'created_by'});
+  User.hasMany(Question.model(), {foreignKey:'created_by'});
+  User.hasMany(Questionnaire.model(), {foreignKey:'created_by'});
 };
 
 module.exports = {

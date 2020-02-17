@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Repository = require('../../users-management/repository/userRepository');
 
-module.exports = class UserAuthenticationCheckUserAuthenticationCheck {
+module.exports = class UserAuthenticationCheck {
   constructor() {
   }
 

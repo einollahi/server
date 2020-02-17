@@ -79,7 +79,7 @@ const initialize = seq => {
 const defineRelations = () => {
   const User = require('./user');
 
-  Person.hasOne(User.model(), {foreignKey: {allowNull: true}, onDelete: 'RESTRICT'})
+  Person.hasOne(User.model(), {foreignKey: 'person_id'});
 };
 
 module.exports = {

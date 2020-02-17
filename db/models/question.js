@@ -20,6 +20,10 @@ const initialize = seq => {
       options: {
         type: Sequelize.JSON
       },
+      multi_answer:{
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       position: {
         type: Sequelize.INTEGER
       },
@@ -30,13 +34,13 @@ const initialize = seq => {
 };
 
 const defineRelations = () => {
-  const User = require('./user')
-  const Questionnaire = require('./questionnaire')
-  const Answer = require('./answer')
+  const User = require('./user');
+  const Questionnaire = require('./questionnaire');
+  const Answer = require('./answer');
 
-  Question.belongsTo(User.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
-  Question.belongsTo(Questionnaire.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
-  Question.hasMany(Answer.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
+  Question.belongsTo(User.model(), {foreignKey: 'created_by'});
+  Question.belongsTo(Questionnaire.model(), {foreignKey: 'questionnaire_id'});
+  Question.hasMany(Answer.model(), {foreignKey: 'question_id'});
 };
 
 module.exports = {

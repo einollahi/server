@@ -7,7 +7,8 @@ const user = 'user';
 module.exports = {
   system: {
     get: {
-      userAuthenticationCheck: all
+      userAuthenticationCheck: all,
+      getUserProfile: [admin, moderator, vip_user, user]
     }
   },
   user: {

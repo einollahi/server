@@ -30,8 +30,8 @@ const defineRelations = () => {
   const User = require('./user')
   const Question = require('./question')
 
-  Questionnaire.belongsTo(User.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
-  Questionnaire.hasMany(Question.model(), {foreignKey: {allowNull: false}, onDelete: 'RESTRICT'});
+  Questionnaire.belongsTo(User.model(), {foreignKey: 'created_by'});
+  Questionnaire.hasMany(Question.model(), {foreignKey: 'questionnaire_id'});
 };
 
 module.exports = {
